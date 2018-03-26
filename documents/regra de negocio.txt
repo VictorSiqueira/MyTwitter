@@ -1,0 +1,15 @@
+///// NOVOS USUARIOS - DONE
+1 + Obter followers de um usuario
+2 + remover usuarios que tenham o parametro "following" = true 
+3 + salvar lista do 2
+4 - verificar limite de acao "seguir"
+5 + Seguir listagem ate o limite da acao ou lista do item 2
+6 + remover usaurios que seguiu da listagem do item 2
+
+///// MANUTENCAO DE USUARIOS SEGUIDOS
+1 - Obter listagem de usuarios que sigo
+2 - remover usuarios que tenham o parametro "following" = true
+3 - remover usuarios que tenham o parametro "verified" = true
+4 - salvar lista do 3
+5 - excluir listagem ate o limite da acao "desrtoy" ou lista do item 3
+6 - remover usaurios que seguiu da listagem do item 3
