@@ -17,7 +17,7 @@ FollowFunctions.prototype.unfollowUser = function (client, user, callback){
 	client.post('friendships/destroy', {user_id: user.id},  function(error, res) {
 	  if (!error) {
 	  	console.log('deseguiu '+user.screen_name);
-	  	callback()
+	  	callback(user)
 	  }else{
 	    console.log(error);
 	  }
