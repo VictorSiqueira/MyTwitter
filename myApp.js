@@ -40,15 +40,15 @@ var deleteUserAfterFollow = function(user){
 	})
 }
 
-var followAgendado = function(){
+var mainFunction = function(){
 	console.log(new Date())
 	if(hour!=12&&hour!=11&&hour!=23&&hour!=24){
 		DataBase.getAllUsers(seguirUsuariosFiltrados)
 		console.log(hour)
 	}else if(hour==12){
-		console.log('limpa')
+		cleanUnfollowers()
 	}else if(hour==24){
-		console.log('limpa e reseta')
+		cleanUnfollowers()
 		hour = 0
 	}
 	hour++
@@ -56,5 +56,35 @@ var followAgendado = function(){
 		followAgendado()
 	}, 3600000, 'funky');
 }
-	
-followAgendado()
+
+var cleanUnfollowers = function(){
+	DataBase.getAllMyFollowers(function(list){
+		console.log('function')
+		for(item in list){
+			console.log(list[item].verified +" = "+ list[item].following)
+			if(!list[item].verified && !list[item].following_back && nameOut(list[item].screen_name)){
+				console.log('entrou')
+				FollowFunctions.unfollowUser(client, list[item], function(user){
+					console.log(user.screen_name)
+					DataBase.deleteMyFollowers(user, function(){
+						//console.log(JSON.stringify(result))
+					})
+				})
+			}
+		}
+	})
+}
+
+
+var nameOut = function(name){
+	var ok = true
+	switch (name){
+		case 'caju_sz':
+		case 'PatoPapao':
+		case 'starswithnames':
+			ok = false
+	}
+	return ok
+}
+
+mainFunction()
