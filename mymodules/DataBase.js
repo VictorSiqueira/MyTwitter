@@ -52,7 +52,8 @@ DataBase.prototype.getAllUsers = function(callback){
 }
 
 DataBase.prototype.deleteUser = function(user, callback){
-  const sql = "DELETE FROM user WHERE id = "+user.id;
+  //const sql = "DELETE FROM user WHERE id = "+user.id;
+  const sql = "DELETE FROM user WHERE screen_name = '"+user.screen_name+"'";
   con.getConnection(function(err, connection) {
     connection.query(sql, function (error, results, fields) {
       callback(results)
@@ -75,6 +76,9 @@ DataBase.prototype.saveMyFollowers = function(user){
     });
   })
 }
+
+
+////////////////////////////////////////////////////////////////////
 
 DataBase.prototype.updateMyFollowers = function(user){
   const sql = "UPDATE follower SET "+ 

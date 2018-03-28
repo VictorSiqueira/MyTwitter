@@ -24,8 +24,8 @@ var seguirUsuariosFiltrados = function(list){
 		if(item <= followLimit){
 			if(list[item].screen_name!='VSiqueira268'
 				&& !list[item].following){
-				FollowFunctions.followUser(client, list[item], function(){
-					deleteUserAfterFollow(list[item])
+				FollowFunctions.followUser(client, list[item], function(user){
+					deleteUserAfterFollow(user)
 				})
 			}
 		}else{
@@ -53,7 +53,7 @@ var mainFunction = function(){
 	}
 	hour++
 	setTimeout(function(){
-		followAgendado()
+		mainFunction()
 	}, 3600000, 'funky');
 }
 

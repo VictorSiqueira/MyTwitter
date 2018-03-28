@@ -15,7 +15,7 @@ var client = new Twitter({
 
 //https://github.com/mysqljs/mysql
 
-var followLimit = 20;
+var followLimit = 1;
 var hour = 0
 
 
@@ -24,8 +24,8 @@ var seguirUsuariosFiltrados = function(list){
 		if(item <= followLimit){
 			if(list[item].screen_name!='VSiqueira268'
 				&& !list[item].following){
-				FollowFunctions.followUser(client, list[item], function(){
-					deleteUserAfterFollow(list[item])
+				FollowFunctions.followUser(client, list[item], function(user){
+					deleteUserAfterFollow(user)
 				})
 			}
 		}else{
@@ -57,4 +57,5 @@ var followAgendado = function(){
 	}, 3600000, 'funky');
 }
 	
-followAgendado()
+//followAgendado()
+DataBase.getAllUsers(seguirUsuariosFiltrados)
