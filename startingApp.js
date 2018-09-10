@@ -12,52 +12,22 @@ var client = new Twitter({
   access_token_secret: 'WD8DKgKmrvGHSUmw880V0P6YLF7vY2jgOiITwkuRWqSQo'
 });
 
-
-//https://github.com/mysqljs/mysql
-
-var followLimit = 20;
-var hour = 0
-
-
-var seguirUsuariosFiltrados = function(list){
-	for(item in list){
-		if(item <= followLimit){
-			if(list[item].screen_name!='VSiqueira268'
-				&& !list[item].following){
-				FollowFunctions.followUser(client, list[item], function(user){
-					deleteUserAfterFollow(user)
-				})
-			}
-		}else{
-			break;
+var getFollowingList = function(){
+	GetUsers.getFollowingList(client, 'VSiqueira268', function(user){
+		//console.log(user.screen_name);
+		if(user.screen_name!=='VSiqueira268'){
+			//DataBase.saveMyFollowers(user)
 		}
-	}
-}
-
-var deleteUserAfterFollow = function(user){
-	DataBase.deleteUser(user, function(result){
-		console.log(JSON.stringify(result))
 	})
 }
 
-var mainFunction = function(){
-	console.log(new Date())
-	if(hour!=12&&hour!=11&&hour!=23&&hour!=24){
-		DataBase.getAllUsers(seguirUsuariosFiltrados)
-		console.log(hour)
-	}else if(hour==12){
-		cleanUnfollowers()
-	}else if(hour==24){
-		cleanUnfollowers()
-		hour = 0
-	}
-	hour++
-	setTimeout(function(){
-		mainFunction()
-	}, 3600000, 'funky');
+var getFollowersList = function(){
+	GetUsers.getList(client, 'VSiqueira268', function(user){
+		DataBase.updateMyFollowers(user)
+	})
 }
 
-var cleanUnfollowers = function(){
+var getFollowersFromDB = function(){
 	DataBase.getAllMyFollowers(function(list){
 		console.log('function')
 		for(item in list){
@@ -75,7 +45,6 @@ var cleanUnfollowers = function(){
 	})
 }
 
-
 var nameOut = function(name){
 	var ok = true
 	switch (name){
@@ -87,4 +56,4 @@ var nameOut = function(name){
 	return ok
 }
 
-mainFunction()
+getFollowingList()

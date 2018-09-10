@@ -12,12 +12,10 @@ var client = new Twitter({
   access_token_secret: 'WD8DKgKmrvGHSUmw880V0P6YLF7vY2jgOiITwkuRWqSQo'
 });
 
-
 //https://github.com/mysqljs/mysql
 
 var followLimit = 1;
 var hour = 0
-
 
 var seguirUsuariosFiltrados = function(list){
 	for(item in list){
@@ -55,6 +53,37 @@ var followAgendado = function(){
 	setTimeout(function(){
 		followAgendado()
 	}, 3600000, 'funky');
+}
+
+
+var cleanUnfollowers = function(){
+	DataBase.getAllMyFollowers(function(list){
+		console.log('function')
+		for(item in list){
+			console.log(list[item].verified +" = "+ list[item].following)
+			if(!list[item].verified && !list[item].following_back && nameOut(list[item].screen_name)){
+				console.log('entrou')
+				FollowFunctions.unfollowUser(client, list[item], function(user){
+					console.log(user.screen_name)
+					DataBase.deleteMyFollowers(user, function(){
+						//console.log(JSON.stringify(result))
+					})
+				})
+			}
+		}
+	})
+}
+
+
+var nameOut = function(name){
+	var ok = true
+	switch (name){
+		case 'caju_sz':
+		case 'PatoPapao':
+		case 'starswithnames':
+			ok = false
+	}
+	return ok
 }
 	
 //followAgendado()

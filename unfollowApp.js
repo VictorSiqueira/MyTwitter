@@ -13,18 +13,18 @@ var client = new Twitter({
 });
 
 
-/*GetUsers.getFollowingList(client, 'VSiqueira268', function(user){
-	console.log(user.screen_name);
-	if(user.screen_name!=='VSiqueira268'){
+GetUsers.getFollowingList(client, 'VSiqueira268', function(user){
+	//console.log(user.screen_name);
+	/*if(user.screen_name!=='VSiqueira268'){
 		DataBase.saveMyFollowers(user)
-	}
-})*/
+	}*/
+})
 
 /*GetUsers.getList(client, 'VSiqueira268', function(user){
 	DataBase.updateMyFollowers(user)
 })*/
 
-DataBase.getAllMyFollowers(function(list){
+/*DataBase.getAllMyFollowers(function(list){
 	console.log('function')
 	for(item in list){
 		console.log(list[item].verified +" = "+ list[item].following)
@@ -38,7 +38,7 @@ DataBase.getAllMyFollowers(function(list){
 			})
 		}
 	}
-})
+})*/
 
 var nameOut = function(name){
 	var ok = true
