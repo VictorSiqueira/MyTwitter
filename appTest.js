@@ -3,7 +3,7 @@ var app = express();
 var server = app.listen(3000);
 var events = require('events');
 var DataBase = require('./mymodules/DataBase.js')
-
+var FollowFunctions = require('./mymodules/FollowFunctions.js');
 
 //API
 var Twitter = require('twitter');
@@ -13,7 +13,6 @@ var client = new Twitter({
 	access_token_key: '66762679-fnzkS2N33eB9B6V0NRt8CivHcdO4v75ZtCZJ8Jq2G',
 	access_token_secret: 'WD8DKgKmrvGHSUmw880V0P6YLF7vY2jgOiITwkuRWqSQo'
 });
-
 
 //Listener
 var eventEmitter = new events.EventEmitter();
@@ -25,7 +24,6 @@ server.listen(3000, function() {
 	console.log('Servidor rodando!');
 });
 
-
 //checando limite de chamadas
 var checkLimit = function(){
 	client.get('application/rate_limit_status', function(error, res) {
@@ -36,7 +34,6 @@ var checkLimit = function(){
 		}
 	});
 }
-
 
 ///////////////REGRA DE NEGOCIO ////////////////
 // 1 - pegar o nome de todos os seguidores que eu tenho 
@@ -55,6 +52,7 @@ var my_followers_name = [];
 var myfollowing_name = [];
 var nameIndex = 0;
 var myScreenName = "VSiqueira268"
+var listFromDB = []
 
 /////////////// MY CALL
 
@@ -80,6 +78,38 @@ var getMyFollowers =  function(){
 	getFollowers(-1, myScreenName, function(data){
 		iterateThroughResult(data, "user", function(user){
 			DataBase.saveUser(user, "user", true)
+		})
+	})
+}
+
+var getUsersFromDB = function(callback){
+	listFromDB = [];
+	DataBase.getAllUsers(function(list){
+		listFromDB = list;
+		callback();
+	})
+}
+
+////////// OTHER USERS
+
+var getAndCompareFollowers = function(){
+	getUsersFromDB(function(){
+		getFollowersFromOtherUser();
+	})
+}
+
+var getFollowersFromOtherUser =  function(){
+	getFollowers(-1, "StoneDYooDa", function(data){
+		iterateThroughResult(data, "user", function(user){
+			var exists = false
+			for(l in listFromDB){
+				if(listFromDB[l].id == user.id){
+					exists = true;
+				}
+			}
+			if(!exists){
+				DataBase.saveUser(user, "user", false)
+			}
 		})
 	})
 }
@@ -116,18 +146,17 @@ var getFollowing = function(cursor, screenName){
     });
 }
 
+var followUser =  function(user){
+	FollowFunctions.followUser(client, user, function(user){
+		//deleteUserAfterFollow(user)
+	})
+}
+
 var iterateThroughResult = function(data, tableName, callback){
 	console.log("////////////////////////" );
 	for(n in data.users){
     	console.log("calores : " +  data.users[n].id);
     	callback(data.users[n]);
-    	/*if(filterUsers(data.users[n])){
-    		getUserDetail(data.users[n].screen_name, function(error, res){
-    			for(){
-
-    			}
-    		})
-    	}*/
     }
 }
 
@@ -170,4 +199,8 @@ var threeMonthsunavailable = function(user){
 	}
 }
 
-getMyFollowers()
+/*getUsersFromDB(function(){
+	console.log(listFromDB.length);
+})*/
+
+followUser({id:228866748})

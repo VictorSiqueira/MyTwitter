@@ -56,10 +56,12 @@ DataBase.prototype.getAllUsers = function(callback){
   const sql = "Select * FROM user";
   con.getConnection(function(err, connection) {
     connection.query(sql, function (error, results, fields) {
-      callback(results)
       connection.release();
-      if (error) //throw error;
+      if (error) {//throw error;
         console.log("ERROR :"+error)
+      }else{
+        callback(results)
+      }
     });
   })
 }
