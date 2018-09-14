@@ -120,4 +120,37 @@ DataBase.prototype.getAllMyFollowers = function(callback){
   })
 }
 
+
+//////////////////////////////////////////////
+
+DataBase.prototype.updateWhoIFollowed = function(user, callback){
+  const sql = "UPDATE `user` SET `following`= 1 WHERE screen_name = '"+user.screen_name+"'";
+  console.log(sql)
+  con.getConnection(function(err, connection) {
+    connection.query(sql, /*[values],*/ function (error, results, fields) {
+      connection.release();
+      if (error){
+        console.log("ERROR :"+error)
+      }else{
+        callback();
+      }
+    });
+  })
+}
+
+DataBase.prototype.getWhoIDontFollowYet = function(callback){
+  const sql = "SELECT * FROM `user` WHERE `following` = 0 ";
+  console.log(sql)
+  con.getConnection(function(err, connection) {
+    connection.query(sql, /*[values],*/ function (error, results, fields) {
+      connection.release();
+      if (error){
+        console.log("ERROR :"+error)
+      }else{
+        callback(results);
+      }
+    });
+  })
+}
+
 module.exports = new DataBase();

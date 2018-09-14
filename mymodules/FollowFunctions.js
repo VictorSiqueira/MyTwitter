@@ -3,7 +3,7 @@
 var FollowFunctions = function () { };
 
 FollowFunctions.prototype.followUser = function (client, user, callback){
-	client.post('friendships/create', {user_id: user.id},  function(error, res) {
+	client.post('friendships/create', /*{user_id: user.id}*/{screen_name : user.screen_name},  function(error, res) {
 	  if (!error) {
 	  	console.log('seguiu '+res.screen_name);
 	  	callback(res)

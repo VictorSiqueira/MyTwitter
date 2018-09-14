@@ -53,6 +53,7 @@ var myfollowing_name = [];
 var nameIndex = 0;
 var myScreenName = "VSiqueira268"
 var listFromDB = []
+var followIndex = 0;
 
 /////////////// MY CALL
 
@@ -146,9 +147,10 @@ var getFollowing = function(cursor, screenName){
     });
 }
 
-var followUser =  function(user){
+var followUser =  function(user, callback){
 	FollowFunctions.followUser(client, user, function(user){
 		//deleteUserAfterFollow(user)
+		callback(user);
 	})
 }
 
@@ -200,7 +202,19 @@ var threeMonthsunavailable = function(user){
 }
 
 /*getUsersFromDB(function(){
-	console.log(listFromDB.length);
+	getFollowersFromOtherUser();
 })*/
 
-followUser({id:228866748})
+
+DataBase.getWhoIDontFollowYet(function(results){
+	listFromDB = results;
+	while(followIndex < 50){
+		console.log(listFromDB[followIndex])
+		followUser(listFromDB[followIndex], function(user){
+			DataBase.updateWhoIFollowed(user, function(){
+				console.log(listFromDB[followIndex].id+" | "+listFromDB[followIndex].following)
+			})
+		})
+		followIndex++;
+	}
+})
