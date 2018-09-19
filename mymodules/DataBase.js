@@ -28,8 +28,8 @@ DataBase.prototype.initDatabase = function(){
 
 DataBase.prototype.saveUser = function(user, tableName, isMyFollower){
   //initiateDatabase()
-	const sql = "INSERT INTO "+tableName+"(id, name, screen_name, followers, following, verified, follow_me) VALUES ?";
 	const values =[[user.id, user.name.replace(/[^\w\s]/gi, ''), user.screen_name, user.followers_count, user.following,user.verified, isMyFollower]]
+  const sql = "INSERT INTO "+tableName+"(id, name, screen_name, followers, following, verified, follow_me) VALUES ? ON DUPLICATE KEY UPDATE name='"+user.name+"', screen_name='"+user.name+"', followers='"+user.followers+"', following='"+user.following+"',verified='"+user.verified+"', follow_me='"+user.follow_me+"'";
   con.getConnection(function(err, connection) {
     connection.query(sql, [values], function (error, results, fields) {
       connection.release();
