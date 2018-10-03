@@ -218,19 +218,25 @@ var nameOut = function(name){
 })*/
 
 
-/*DataBase.getWhoIDontFollowYet(function(results){
+DataBase.getWhoIDontFollowYet(function(results){
 	listFromDB = results;
 	while(followIndex < 50){
 		console.log(listFromDB[followIndex])
-		followUser(listFromDB[followIndex], function(user){
-			DataBase.updateWhoIFollowed(user, function(){
-				console.log(listFromDB[followIndex].id+" | "+listFromDB[followIndex].following)
+		if(listFromDB[followIndex]!=undefined){
+			followUser(listFromDB[followIndex], function(user){
+				if(user!=undefined){
+					DataBase.updateWhoIFollowed(user, function(){
+						console.log(user.id+" | "+user.following)
+					})
+				}
 			})
-		})
-		followIndex++;
+			followIndex++;
+		}else{
+			break;
+		}
 	}
-})*/
-
+})
+/*
 var dummie = { id: 66762679,
     id_str: '66762679',
     name: 'Victor Siqueira',
@@ -302,4 +308,4 @@ var dummie = { id: 66762679,
     suspended: false,
     needs_phone_verification: false };
 
-    DataBase.saveUser(dummie, "user", false)
+    DataBase.saveUser(dummie, "user", false)*/
